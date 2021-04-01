@@ -1,6 +1,8 @@
 {
-  "total_sellers": 70,
-  "short_interest_pct": 110,
+  "retail_count": 100,
+  "wsb_count": 100,
+  "hedge_count": 100,
+  "melvin_count": 100,
   "retail_capital": 10000,
   "retail_profit": 10,
   "retail_sell": 5,
