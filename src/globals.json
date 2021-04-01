@@ -22,18 +22,6 @@
   "topology": {"search_radius": 1000},
   "schema": {
     "properties": {
-      "total_sellers": {
-        "type": "number",
-        "minimum": 30,
-        "maximum": 200,
-        "multipleOf": 10
-      },
-      "short_interest_pct": {
-        "type": "number",
-        "minimum": 70,
-        "maximum": 120,
-        "multipleOf": 1
-      },
       "steps": {
         "type": "number",
         "minimum": 100,
