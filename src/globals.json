@@ -1,1 +1,69 @@
-{}
+{
+  "total_sellers": 70,
+  "short_interest_pct": 110,
+  "retail_capital": 10000,
+  "retail_profit": 10,
+  "retail_sell": 5,
+  "wsb_capital": 5000,
+  "wsb_profit": 50,
+  "wsb_sell": 100,
+  "hedge_short_amount": 30,
+  "hedge_capital": 1000000,
+  "hedge_profit": 5,
+  "hedge_sell": 10,
+  "melvin_short_amount": 300,
+  "melvin_capital": 100000,
+  "melvin_profit": 1000,
+  "melvin_sell": 1000,
+  "steps": 300,
+  "max_starting_shares": 15,
+  "topology": {"search_radius": 1000},
+  "schema": {
+    "properties": {
+      "total_sellers": {
+        "type": "number",
+        "minimum": 30,
+        "maximum": 200,
+        "multipleOf": 10
+      },
+      "short_interest_pct": {
+        "type": "number",
+        "minimum": 70,
+        "maximum": 120,
+        "multipleOf": 1
+      },
+      "steps": {
+        "type": "number",
+        "minimum": 100,
+        "maximum": 400,
+        "multipleOf": 10
+      },
+      "max_starting_shares": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 30,
+        "multipleOf": 1
+      },
+      "retail_capital": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+      "wsb_capital": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+      "hedge_capital": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+      "melvin_capital": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+    }
+  }
+}
