@@ -1,9 +1,12 @@
+// TODO: switch to Python and cross-check the validity of the code
+
 /**
  * @param {AgentState} state
  * @param {AgentContext} context
  */
 const behavior = (state, context) => {
   const {
+    current_market_price,
     retail_count,
     wsb_count,
     hedge_count,
@@ -14,11 +17,11 @@ const behavior = (state, context) => {
     wsb_capital,
     wsb_profit,
     wsb_sell,
-    hedge_short_amount,
+    hedge_short_amount, // how many shares 1 hedge agent is shorting
     hedge_capital,
     hedge_profit,
     hedge_sell,
-    melvin_short_amount,
+    melvin_short_amount, // how many shares 1 melvin agent is shorting
     melvin_capital,
     melvin_profit,
     melvin_sell,
@@ -30,30 +33,30 @@ const behavior = (state, context) => {
     "agent_name": "market",
     "behaviors": ["@hash/counter/counter.rs", "market.js"],
     "counter": 0,
-    "position": [0, 0],
     "sells": [],
+    "buys": []
   };
 
   const retail_traders = [...Array(Math.round(retail_count)).keys()].map(i => ({
     "agent_type": "retail",
-    "behaviors": ["@hash/counter/counter.rs", "sell.js", "display_trader.js"],
-    "position": [i, 3],
+    "behaviors": ["@hash/counter/counter.rs"], // TODO: update the correct behaviors
+    // "position": [i, 3],
     "shares": Math.round(hash_stdlib.stats.uniform.sample(0, max_starting_shares)),
     "counter": 0,
     "capital": retail_capital,
     "profit_threshold": retail_profit,
-    "profit_threshold": retail_sell,
+    "profit_threshold": retail_sell
   }))
 
   const wsb_traders = [...Array(Math.round(wsb_count)).keys()].map(i => ({
     "agent_type": "wsb",
-    "behaviors": ["@hash/counter/counter.rs", "sell.js", "display_trader.js"],
-    "position": [i, 4],
+    "behaviors": ["@hash/counter/counter.rs"], // TODO: update the correct behaviors
+    // "position": [i, 4],
     "shares": Math.round(hash_stdlib.stats.uniform.sample(0, max_starting_shares)),
     "counter": 0,
     "capital": wsb_capital,
     "profit_threshold": wsb_profit,
-    "profit_threshold": wsb_sell,
+    "profit_threshold": wsb_sell
   }))
 
   const total_shares = hash_stdlib.stats.sum(retail_traders.map(t => t.shares))
@@ -61,28 +64,28 @@ const behavior = (state, context) => {
 
   const hedge_funds = [...Array(hedge_count).keys()].map(i => ({
     "agent_type": "hedge",
-    "behaviors": ["@hash/counter/counter.rs", "cover_short.js"],
-    "position": [i, 5],
+    "behaviors": ["@hash/counter/counter.rs"], // TODO: update the correct behaviors
+    // "position": [i, 5],
     "shorts": hedge_short_amount,
     "counter": 0,
     "price": 1,
     "cost": 0,
     "capital": hedge_capital,
     "profit_threshold": hedge_profit,
-    "profit_threshold": hedge_sell,
+    "profit_threshold": hedge_sell
   }))
 
   const melvin_funds = [...Array(melvin_count).keys()].map(i => ({
     "agent_type": "melvin",
-    "behaviors": ["@hash/counter/counter.rs", "cover_short.js"],
-    "position": [i, 6],
+    "behaviors": ["@hash/counter/counter.rs"], // TODO: update the correct behaviors
+    // "position": [i, 6],
     "shorts": melvin_short_amount,
     "counter": 0,
     "price": 1,
     "cost": 0,
     "capital": melvin_capital,
     "profit_threshold": melvin_profit,
-    "profit_threshold": melvin_sell,
+    "profit_threshold": melvin_sell
   }))
 
 
