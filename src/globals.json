@@ -18,6 +18,7 @@
   "melvin_profit": 1000,
   "melvin_sell": 1000,
   "steps": 300,
+  "current_market_price": 10,
   "max_starting_shares": 15,
   "topology": {"search_radius": 1000},
   "schema": {

@@ -1,7 +1,8 @@
 import math
 import random
 
-# need to change function names
+# TODO: need to change function names
+# we may not have to define the schema in context.globals, might be unnecessary if typing is consistent
 
 def behavior(state, context):
 
