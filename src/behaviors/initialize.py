@@ -7,7 +7,6 @@ import random
 def behavior(state, context):
 
     props = context.globals()
-
     market = {
         "agent_name": "market",
         "behaviors": ["@hash/counter/counter.rs", "market.py"],
@@ -15,63 +14,62 @@ def behavior(state, context):
         "sells": [],
         "buys": []
     }
-
-    retail_traders = map(lambda i : {
+    retail_traders = [dict({
         "agent_type": "retail",
         "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 3],
-        "shares": math.round(random.uniform(0, props.max_starting_shares)),
+        "shares": round(random.uniform(0, props["max_starting_shares"])),
         "counter": 0,
-        "capital": props.retail_capital,
-        "profit_threshold": props.retail_profit,
-        "loss_threshold": props.retail_sell,
-        "buy_threshold": props.retail_buy
-    }, [ind for ind in range(len(props.retail_count))])
+        "capital": props["retail_capital"],
+        "profit_threshold": props["retail_profit"],
+        "loss_threshold": props["retail_sell"],
+        "buy_threshold": props["retail_buy"]
+    }) for ind in range(int(props["retail_count"]))]
 
-    wsb_traders = map(lambda i: {
+    wsb_traders = [dict({
         "agent_type": "wsb",
         "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         # "position": [i, 4],
-        "shares": math.round(random.uniform(0, props.max_starting_shares)),
+        "shares": round(random.uniform(0, props["max_starting_shares"])),
         "counter": 0,
-        "capital": props.wsb_capital,
-        "profit_threshold": props.wsb_profit,
-        "loss_threshold": props.wsb_sell,
-        "buy_threshold": props.wsb_buy
-    }, [ind for ind in range(len(props.wsb_count))])
+        "capital": props["wsb_capital"],
+        "profit_threshold": props["wsb_profit"],
+        "loss_threshold": props["wsb_sell"],
+        "buy_threshold": props["wsb_buy"]
+    }) for ind in range(int(props["wsb_count"]))]
 
-    total_shares = sum([t["shares"] for t in retail_traders]) + sum(t["shares"] for t in wsb_traders)
+    print(retail_traders, wsb_traders)
 
-    hedge_funds = map(lambda i: {
+    hedge_funds = [dict({
         "agent_type": "hedge",
         "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 5],
-        "shorts": props.hedge_short_amount,
+        "shorts": props["hedge_short_amount"],
         "counter": 0,
         # "price": 1,
         # "cost": 0,
-        "capital": props.hedge_capital,
-        "profit_threshold": props.hedge_profit,
-        "loss_threshold": props.hedge_sell,
-        "buy_threshold": props.hedge_buy
-    }, [ind for ind in range(len(props.hedge_count))])
+        "capital": props["hedge_capital"],
+        "profit_threshold": props["hedge_profit"],
+        "loss_threshold": props["hedge_sell"],
+        "buy_threshold": props["hedge_buy"]
+    }) for ind in range(int(props["hedge_count"]))]
 
-    melvin_funds = map(lambda i: {
+    melvin_funds = [dict({
         "agent_type": "melvin",
         "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 6],
-        "shorts": props.melvin_short_amount,
+        "shorts": props["melvin_short_amount"],
         "counter": 0,
         # "price": 1,
         # "cost": 0,
-        "capital": props.melvin_capital,
-        "profit_threshold": props.melvin_profit,
-        "loss_threshold": props.melvin_sell,
-        "buy_threshold": props.melvin_buy
-    }, [ind for ind in range(len(props.melvin_count))])
+        "capital": props["melvin_capital"],
+        "profit_threshold": props["melvin_profit"],
+        "loss_threshold": props["melvin_sell"],
+        "buy_threshold": props["melvin_buy"]
+    }) for ind in range(int(props["melvin_count"]))]
     
-    agents = [retail_traders] + [wsb_traders] + [hedge_funds] + [melvin_funds] + [market]
-    for agent in agents:
+    agents = retail_traders + wsb_traders + hedge_funds + melvin_funds + [market]
+    for i, agent in enumerate(agents):
         state.add_message("hash", "create_agent", agent)
-
     state.add_message("hash", "remove_agent")
+    
