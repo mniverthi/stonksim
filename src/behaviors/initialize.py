@@ -38,8 +38,6 @@ def behavior(state, context):
         "buy_threshold": props["wsb_buy"]
     }) for ind in range(int(props["wsb_count"]))]
 
-    print(retail_traders, wsb_traders)
-
     hedge_funds = [dict({
         "agent_type": "hedge",
         "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
