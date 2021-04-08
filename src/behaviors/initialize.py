@@ -18,7 +18,7 @@ def behavior(state, context):
 
     retail_traders = map(lambda i : {
         "agent_type": "retail",
-        "behaviors": ["@hash/counter/counter.rs" ], # TODO: update the correct behaviors
+        "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 3],
         "shares": math.round(random.uniform(0, props.max_starting_shares)),
         "counter": 0,
@@ -30,7 +30,7 @@ def behavior(state, context):
 
     wsb_traders = map(lambda i: {
         "agent_type": "wsb",
-        "behaviors": ["@hash/counter/counter.rs" ], # TODO: update the correct behaviors
+        "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         # "position": [i, 4],
         "shares": math.round(random.uniform(0, props.max_starting_shares)),
         "counter": 0,
@@ -44,7 +44,7 @@ def behavior(state, context):
 
     hedge_funds = map(lambda i: {
         "agent_type": "hedge",
-        "behaviors": ["@hash/counter/counter.rs" ], # TODO: update the correct behaviors
+        "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 5],
         "shorts": props.hedge_short_amount,
         "counter": 0,
@@ -58,7 +58,7 @@ def behavior(state, context):
 
     melvin_funds = map(lambda i: {
         "agent_type": "melvin",
-        "behaviors": ["@hash/counter/counter.rs"], # TODO: update the correct behaviors
+        "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 6],
         "shorts": props.melvin_short_amount,
         "counter": 0,

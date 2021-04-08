@@ -1,5 +1,5 @@
 [
 	{
-		"behaviors": ["initialize.js"]
+		"behaviors": ["initialize.py"]
 	}
 ]
