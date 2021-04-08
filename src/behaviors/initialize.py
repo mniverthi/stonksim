@@ -19,12 +19,13 @@ def behavior(state, context):
     retail_traders = map(lambda i : {
         "agent_type": "retail",
         "behaviors": ["@hash/counter/counter.rs" ], # TODO: update the correct behaviors
-        "position": [i, 3],
+        #"position": [i, 3],
         "shares": math.round(random.uniform(0, props.max_starting_shares)),
         "counter": 0,
         "capital": props.retail_capital,
         "profit_threshold": props.retail_profit,
-        "profit_threshold": props.retail_sell
+        "loss_threshold": props.retail_sell,
+        "buy_threshold": props.retail_buy
     }, [ind for ind in range(len(props.retail_count))])
 
     wsb_traders = map(lambda i: {
@@ -35,7 +36,8 @@ def behavior(state, context):
         "counter": 0,
         "capital": props.wsb_capital,
         "profit_threshold": props.wsb_profit,
-        "profit_threshold": props.wsb_sell
+        "loss_threshold": props.wsb_sell,
+        "buy_threshold": props.wsb_buy
     }, [ind for ind in range(len(props.wsb_count))])
 
     total_shares = sum([t["shares"] for t in retail_traders]) + sum(t["shares"] for t in wsb_traders)
@@ -43,27 +45,29 @@ def behavior(state, context):
     hedge_funds = map(lambda i: {
         "agent_type": "hedge",
         "behaviors": ["@hash/counter/counter.rs" ], # TODO: update the correct behaviors
-        "position": [i, 5],
+        #"position": [i, 5],
         "shorts": props.hedge_short_amount,
         "counter": 0,
         # "price": 1,
         # "cost": 0,
         "capital": props.hedge_capital,
         "profit_threshold": props.hedge_profit,
-        "profit_threshold": props.hedge_sell
+        "loss_threshold": props.hedge_sell,
+        "buy_threshold": props.hedge_buy
     }, [ind for ind in range(len(props.hedge_count))])
 
     melvin_funds = map(lambda i: {
         "agent_type": "melvin",
         "behaviors": ["@hash/counter/counter.rs"], # TODO: update the correct behaviors
-        "position": [i, 6],
+        #"position": [i, 6],
         "shorts": props.melvin_short_amount,
         "counter": 0,
         # "price": 1,
         # "cost": 0,
         "capital": props.melvin_capital,
         "profit_threshold": props.melvin_profit,
-        "profit_threshold": props.melvin_sell
+        "loss_threshold": props.melvin_sell,
+        "buy_threshold": props.melvin_buy
     }, [ind for ind in range(len(props.melvin_count))])
     
     agents = [retail_traders] + [wsb_traders] + [hedge_funds] + [melvin_funds] + [market]
