@@ -1,5 +1,3 @@
-
-
 def behavior(state, context):
 
     sale = [m for m in context.messages() if m.type == "sell_results"]
@@ -14,10 +12,7 @@ def behavior(state, context):
     
     if context.globals()["current_market_price"] > state.profit_threshold * context.globals()["original_market_price"]\
     or context.globals()["current_market_price"] < state.loss_threshold * context.globals()["original_market_price"]:
-        state.addMessage("market", "sell_limit", {
+        state.add_message("market", "sell_limit", {
         "sell_limit": state.sell_limit,
         "shares": state.shares,
         }) 
-        
-    
-    

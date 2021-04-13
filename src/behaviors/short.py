@@ -1,5 +1,3 @@
-
-
 def behavior(state, context):
     shorts = [n for n in context.neighbors() if n.agent_type == "short"]
 
@@ -9,6 +7,3 @@ def behavior(state, context):
         "sell_limit": state.sell_limit,
         "shares": state.shares,
       })
-
-
-    

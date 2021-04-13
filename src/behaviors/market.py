@@ -5,7 +5,7 @@ def behavior(state, context):
             sells: array of sell orders (messages)
             buys: array of buy orders (messages)
     '''
-    if (state.counter == context.globals().steps):
+    if (state.counter == context.globals()['steps']):
         raise RuntimeError("_HASH_PRIVATE_TEMPORARY_COMPLETE_ERROR")
     
     props = context.globals()
@@ -13,16 +13,17 @@ def behavior(state, context):
     state.sells = [m for m in orders if m.type == "sell_order"] # update naming on sell limit
     state.buys = [m for m in orders if m.type == "buy_order"] # update naming on buy limit
 
-    total_quantity_sold, total_quantity_bought = sum([m.data['quantity'] for m in sells]), sum([m.data['quantity'] for m in buys])
+    total_quantity_sold, total_quantity_bought = sum([m.data['quantity'] for m in state.sells]), sum([m.data['quantity'] for m in state.buys])
 
     def calculate_market_price_change(numbuys, numsells) -> int:
-        print(numbuys, numsells)
-        return numbuys, numsells
+        # print(numbuys, numsells)
+        # return numbuys, numsells
+        return context.globals()['current_market_price'] + 1.0
 
     while len(state.buys) > 0:
         while state.buys[0].data['quantity'] > 0 and len(state.sells) > 0:
             if state.sells[0].data["quantity"] == 0:
-                state.addMessage(state.sells[0].agent, "results", {
+                state.add_message(state.sells[0].agent, "results", {
                     "sell_order_remaining": state.sells[0].data["quantity"]
                 })
                 state.sells = state.sells[1:]
@@ -32,13 +33,13 @@ def behavior(state, context):
             else:
                 state.buys[0].data["quantity"] = 0
                 state.sells[0].data["quantity"] -= state.buys[0].data["quantity"]
-        state.addMessage(state.buys[0].agent, "results", {
+        state.add_message(state.buys[0].agent, "results", {
             "buy_order_remaining": state.buys[0].data["quantity"]
         })
 
     for sell_order in state.sells:
-        state.addMessage(sell_order.agent, "results", {
+        state.add_message(sell_order.agent, "results", {
             "sell_order_remaining": sell_order.data["quantity"]
         })
         
-    context.globals().current_market_price = calculate_market_price_change(total_quantity_bought, total_quantity_sold)
+    context.globals()['current_market_price'] = calculate_market_price_change(total_quantity_bought, total_quantity_sold)
