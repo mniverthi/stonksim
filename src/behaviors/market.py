@@ -10,36 +10,96 @@ def behavior(state, context):
     
     props = context.globals()
     orders = context.messages()
-    state.sells = [m for m in orders if m.type == "sell_order"] # update naming on sell limit
-    state.buys = [m for m in orders if m.type == "buy_order"] # update naming on buy limit
 
-    total_quantity_sold, total_quantity_bought = sum([m.data['quantity'] for m in state.sells]), sum([m.data['quantity'] for m in state.buys])
+    # print(orders)
+    
+    state.sells = list(filter(lambda m: m.type == "sell_order", orders)) # update naming on sell limit
+    state.buys = list(filter(lambda m: m.type == "buy_order", orders)) # update naming on buy limit
+    total_quantity_sold, total_quantity_bought = 0, 0
+    if len(state.sells) > 0:
+        # for i in state.sells:
+        #     print(len(i["data"]))
+        total_quantity_sold = sum([m.data["quantity"] for m in state.sells])
+    if len(state.buys) > 0:    
+        total_quantity_bought = sum([m.data["quantity"] for m in state.buys])
 
-    def calculate_market_price_change(numbuys, numsells) -> int:
-        # print(numbuys, numsells)
-        # return numbuys, numsells
-        return context.globals()['current_market_price'] + 1.0
+    def calculate_market_price_change(numbuys, numsells) -> float:
+        if numsells == 0 and numbuys == 0:
+            return state['current_price']
+        if numsells == 0:
+            numsells = 1
+        ratio = 0.2 * (numbuys - numsells)
+        return int(state['current_price']) + ratio
 
-    while len(state.buys) > 0:
-        while state.buys[0].data['quantity'] > 0 and len(state.sells) > 0:
-            if state.sells[0].data["quantity"] == 0:
-                state.add_message(state.sells[0].agent, "results", {
-                    "sell_order_remaining": state.sells[0].data["quantity"]
-                })
-                state.sells = state.sells[1:]
-            if state.buys[0].data["quantity"] > state.sells[0].data["quantity"]:
-                state.buys[0].data["quantity"] -= state.sells[0].data["quantity"]
-                state.sells[0].data["quantity"] = 0
-            else:
-                state.buys[0].data["quantity"] = 0
-                state.sells[0].data["quantity"] -= state.buys[0].data["quantity"]
-        state.add_message(state.buys[0].agent, "results", {
-            "buy_order_remaining": state.buys[0].data["quantity"]
+    i, j = 0, 0
+    while i < len(state.buys) and j < len(state.sells):
+        if state.buys[i].data['quantity'] > state.sells[j].data['quantity']:
+            state.add_message(state.sells[j]["from"], "sell_results", {
+                "desired": state.sells[j].data["quantity"],
+                "fulfilled": 0,
+                "price_fulfilled": state['current_price']
+            })
+            state.buys[i].data["quantity"] -= state.sells[j].data["quantity"]
+            state.sells[j].data["quantity"] = 0
+            j += 1
+        elif state.buys[i].data['quantity'] < state.sells[j].data['quantity']:
+            state.add_message(state.buys[i]["from"], "buy_results", {
+                "desired": state.buys[i].data["quantity"],
+                "fulfilled": 0,
+                "price_fulfilled": state['current_price']
+            })
+            state.sells[j].data["quantity"] -= state.buys[i].data["quantity"]
+            state.buys[i].data["quantity"] = 0
+            i += 1
+        else:
+            state.add_message(state.sells[j]["from"], "sell_results", {
+                "desired": state.sells[j].data["quantity"],
+                "fulfilled": 0,
+                "price_fulfilled": state['current_price']
+            })
+            state.add_message(state.buys[i]["from"], "buy_results", {
+                "desired": state.buys[i].data["quantity"],
+                "fulfilled": 0,
+                "price_fulfilled": state['current_price']
+            })
+            state.buys[i].data["quantity"] = 0
+            state.sells[j].data["quantity"] = 0
+            i += 1
+            j += 1
+    
+    while i < len(state.buys):
+        state.add_message(state.buys[i]["from"], "buy_results", {
+            "desired": state.buys[i].data["quantity"],
+            "fulfilled": 0,
+            "price_fulfilled": state['current_price']
         })
-
-    for sell_order in state.sells:
-        state.add_message(sell_order.agent, "results", {
-            "sell_order_remaining": sell_order.data["quantity"]
+        i += 1
+    while j < len(state.sells):
+        state.add_message(state.sells[j]["from"], "sell_results", {
+            "desired": state.sells[j].data["quantity"],
+            "fulfilled": 0,
+            "price_fulfilled": state['current_price']
         })
+        j += 1
         
-    context.globals()['current_market_price'] = calculate_market_price_change(total_quantity_bought, total_quantity_sold)
+    prev_price = state['current_price']
+    state['current_price'] = calculate_market_price_change(total_quantity_bought, total_quantity_sold)
+    print("Previous price: ", prev_price)
+    print("Current price: ", state['current_price'])
+    for i in range(props["retail_count"]):
+        state.add_message("retail" + str(i), "price_update", {
+            "current_price": state['current_price']
+        })
+    for i in range(props["hedge_count"]):
+        state.add_message("hedge" + str(i), "price_update", {
+            "current_price": state['current_price']
+        })
+    for i in range(props["wsb_count"]):
+        state.add_message("wsb" + str(i), "price_update", {
+            "current_price": state['current_price']
+        })
+    for i in range(props["melvin_count"]):
+        state.add_message("melvin" + str(i), "price_update", {
+            "current_price": state['current_price']
+        })
+    
