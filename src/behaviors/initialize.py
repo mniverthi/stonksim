@@ -13,19 +13,19 @@ def behavior(state, context):
         "counter": 0,
         "sells": [],
         "buys": [],
-        "current_price": props["initial_price"]
+        "current_price": 10
     }
     retail_traders = [dict({
         "agent_name": "retail" + str(ind),
         "agent_type": "retail",
         "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 3],
-        "shares": round(random.uniform(0, props["max_starting_shares"])),
+        "shares": round(random.gauss(props["max_starting_shares"], 10)),
         "counter": 0,
         "capital": round(random.gauss(props["retail_capital"], 100)),
-        "profit_threshold": props["retail_profit"],
-        "loss_threshold": props["retail_sell"],
-        "buy_threshold": props["retail_buy"]
+        "profit_threshold": random.gauss(props["retail_profit"],0.02),
+        "loss_threshold": random.gauss(props["retail_sell"],.03),
+        "buy_threshold": random.gauss(props["retail_buy"],.04)
     }) for ind in range(int(props["retail_count"]))]
 
     wsb_traders = [dict({
@@ -46,14 +46,14 @@ def behavior(state, context):
         "agent_type": "hedge",
         "behaviors": ["@hash/counter/counter.rs", "sell.py", "buy.py"], # TODO: update the correct behaviors
         #"position": [i, 5],
-        "shares": props["hedge_short_amount"],
+        "shares": round(random.gauss(props["max_starting_shares"], 10)) * 10,
         "counter": 0,
         # "price": 1,
         # "cost": 0,
         "capital": round(random.gauss(props["hedge_capital"], 100)),
-        "profit_threshold": props["hedge_profit"],
-        "loss_threshold": props["hedge_sell"],
-        "buy_threshold": props["hedge_buy"]
+        "profit_threshold": random.gauss(props["hedge_profit"],.02),
+        "loss_threshold": random.gauss(props["hedge_sell"], .03),
+        "buy_threshold": random.gauss(props["hedge_buy"],.04)
     }) for ind in range(int(props["hedge_count"]))]
 
     melvin_funds = [dict({
