@@ -1,43 +1,38 @@
 {
-  "confidence": 0.5,
-  "retail_count": 1000,
+  "short_interest": 0.5,
+  "retail_count": 10000,
   "wsb_count": 0,
   "hedge_count": 100,
   "melvin_count": 0,
   "retail_capital": 10000,
-  "retail_profit": 1.1,
-  "retail_sell": 0.95,
-  "retail_buy": 0.95,
+  "retail_sell": 0.5,
+  "retail_buy": 0.5,
   "wsb_capital": 5000,
-  "wsb_profit": 10.0,
-  "wsb_sell": 0.0,
-  "wsb_buy": 0.1,
-  "hedge_short_amount": 30,
+  "wsb_sell": 0.01,
+  "wsb_buy": 0.99,
   "hedge_capital": 1000000,
-  "hedge_profit": 2,
-  "hedge_sell": 0.20,
-  "hedge_buy": 0.84,
-  "melvin_short_amount": 300,
+  "hedge_sell": 0.5,
+  "hedge_buy": 0.5,
   "melvin_capital": 100000,
-  "melvin_profit": 0.75,
-  "melvin_sell": 0.5,
-  "melvin_buy": 0.5,
+  "melvin_sell": 0.35,
+  "melvin_buy": 0.9,
   "steps": 50,
-  "initial_price": 112,
-  "max_starting_shares": 100,
+  "initial_price": 10,
+  "starting_shares": 1000,
+  "time_to_cover": 10,
   "topology": {"search_radius": 1000},
   "schema": {
     "properties": {
       "steps": {
         "type": "number",
-        "minimum": 100,
-        "maximum": 400,
-        "multipleOf": 10
+        "minimum": 1,
+        "maximum": 100,
+        "multipleOf": 5
       },
-      "max_starting_shares": {
+      "starting_shares": {
         "type": "number",
         "minimum": 1,
-        "maximum": 30,
+        "maximum": 1000,
         "multipleOf": 1
       },
       "retail_capital": {
@@ -59,6 +54,91 @@
         "type": "number",
         "minimum": 0,
         "multipleOf": 1
+      },
+      "time_to_cover": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 100,
+        "multipleOf": 1
+      },
+      "initial_price": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1000
+      },
+      "retail_count": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+      "hedge_count": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+      "wsb_count": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+      "melvin_count": {
+        "type": "number",
+        "minimum": 0,
+        "multipleOf": 1
+      },
+      "retail_sell": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "hedge_sell": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "wsb_sell": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "melvin_sell": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "retail_buy": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "hedge_buy": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "wsb_buy": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "melvin_buy": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1,
+        "multipleOf": 0.01
+      },
+      "short_interest": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 2,
+        "multipleOf": 0.01
       }
     }
   }

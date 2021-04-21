@@ -1,4 +1,3 @@
-import random
 def behavior(state, context):
 
     '''
@@ -8,7 +7,6 @@ def behavior(state, context):
     '''
     if (state.counter == context.globals()['steps']):
         raise RuntimeError("_HASH_PRIVATE_TEMPORARY_COMPLETE_ERROR")
-    # random.seed(1)
     props = context.globals()
     orders = context.messages()
     # print(state['current_price'])
@@ -31,7 +29,7 @@ def behavior(state, context):
         #print("HOOO")
         print("Numbuys: ", numbuys)
         print("Numsells: ", numsells)
-        ratio = pow(1.001, (numbuys - numsells))
+        ratio = pow(1 + (numbuys / ((numsells + 1) * (props["starting_shares"]))), (numbuys - numsells))
         print("Current price: ", state['current_price'])
         print("New price: ", ratio * state['current_price'])
         # if int(state['current_price'])+ratio < .1:

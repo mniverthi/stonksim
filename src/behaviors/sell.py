@@ -1,11 +1,11 @@
 import random
-def behavior(state, context):
-    bullish = context.globals()["confidence"] 
 
+def behavior(state, context):
+    
     selling = [m for m in context.messages() if m.type == "sell_results"]
     price_update = [m for m in context.messages() if m.type == "price_update"]
     original_price = context.globals()["initial_price"] 
-    current_market_price = 20
+    current_market_price = original_price
     if len(price_update) > 0:
         # print(len(price_update))
         if (len(price_update[0]["data"]) > 0):
@@ -25,7 +25,7 @@ def behavior(state, context):
 
     # print("prof = "+ str(state.profit_threshold * original_price))
     
-    if state.shares > 0 and random.random() > bullish:
+    if state.shares > 0 and random.random() < state["sell_threshold"]:
         # print("aboutta sell")
         state.add_message("market", "sell_order", {"quantity": 1})
         # state.shares
